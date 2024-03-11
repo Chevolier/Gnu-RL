@@ -139,7 +139,7 @@ class Learner():
         ft = torch.mm(self.Bd_hat, dt).transpose(0, 1) # T-1 x n_state
         ft = ft.unsqueeze(1) # T-1 x 1 x n_state
         
-        x_pred, u_pred, _ = mpc.MPC(n_state=self.n_state,
+        x_pred, u_pred, _ = mpc.MPC(n_state=self.n_state, 
                                     n_ctrl=self.n_ctrl,
                                     T=T,
                                     u_lower = self.u_lower,

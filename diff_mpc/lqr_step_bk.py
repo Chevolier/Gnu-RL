@@ -34,79 +34,74 @@ class LQRStep(Function):
         TODO
     """
 
-    # @profile
-    @staticmethod
-    def forward(ctx, x_init, C, c, F, f=None,
-                n_state=None,
-                n_ctrl=None,
-                T=None,
-                u_lower=None,
-                u_upper=None,
-                u_zero_I=None,
-                delta_u=None,
-                linesearch_decay=0.2,
-                max_linesearch_iter=10,
-                true_cost=None,
-                true_dynamics=None,
-                delta_space=True,
-                current_x=None,
-                current_u=None,
-                verbose=0,
-                back_eps=1e-3,
-                no_op_forward=False,      
+    def __init__(
+            self,
+            n_state,
+            n_ctrl,
+            T,
+            u_lower=None,
+            u_upper=None,
+            u_zero_I=None,
+            delta_u=None,
+            linesearch_decay=0.2,
+            max_linesearch_iter=10,
+            true_cost=None,
+            true_dynamics=None,
+            delta_space=True,
+            current_x=None,
+            current_u=None,
+            verbose=0,
+            back_eps=1e-3,
+            no_op_forward=False,
     ):
-        ctx.n_state = n_state
-        ctx.n_ctrl = n_ctrl
-        ctx.T = T
-        ctx.u_lower = util.get_data_maybe(u_lower)
-        ctx.u_upper = util.get_data_maybe(u_upper)
-        
-        # TODO: Better checks for this
-        if isinstance(ctx.u_lower, int):
-            ctx.u_lower = float(ctx.u_lower)
-        if isinstance(ctx.u_upper, int):
-            ctx.u_upper = float(ctx.u_upper)
-        if isinstance(ctx.u_lower, np.float32):
-            ctx.u_lower = u_lower.item()
-        if isinstance(ctx.u_upper, np.float32):
-            ctx.u_upper = u_upper.item()
-        
-        ctx.u_zero_I = u_zero_I
-        
-        ctx.delta_u = delta_u
-        
-        # if isinstance(delta_u, torch.Tensor):
-        #     ctx.delta_u = delta_u
-        # elif isinstance(delta_u, (int, float)):
-        #     ctx.delta_u = delta_u
-        # else:
-        #     ctx.delta_u = None
-            
-        ctx.linesearch_decay = linesearch_decay
-        ctx.max_linesearch_iter = max_linesearch_iter
-        ctx.true_cost = true_cost
-        ctx.true_dynamics = true_dynamics
-        ctx.delta_space = delta_space
-        ctx.current_x = util.get_data_maybe(current_x)
-        ctx.current_u = util.get_data_maybe(current_u)
-        ctx.verbose = verbose
-        ctx.back_eps = back_eps
-        ctx.no_op_forward = no_op_forward
-        
-        if ctx.no_op_forward:
-            ctx.save_for_backward(
-                x_init, C, c, F, f, ctx.current_x, ctx.current_u)
-            return ctx.current_x, ctx.current_u, None, None
+        self.n_state = n_state
+        self.n_ctrl = n_ctrl
+        self.T = T
 
-        if ctx.delta_space:
+        self.u_lower = util.get_data_maybe(u_lower)
+        self.u_upper = util.get_data_maybe(u_upper)
+
+        # TODO: Better checks for this
+        if isinstance(self.u_lower, int):
+            self.u_lower = float(self.u_lower)
+        if isinstance(self.u_upper, int):
+            self.u_upper = float(self.u_upper)
+        if isinstance(self.u_lower, np.float32):
+            self.u_lower = u_lower.item()
+        if isinstance(self.u_upper, np.float32):
+            self.u_upper = u_upper.item()
+
+        self.u_zero_I = u_zero_I
+        self.delta_u = delta_u
+        self.linesearch_decay = linesearch_decay
+        self.max_linesearch_iter = max_linesearch_iter
+        self.true_cost = true_cost
+        self.true_dynamics = true_dynamics
+        self.delta_space = delta_space
+        self.current_x = util.get_data_maybe(current_x)
+        self.current_u = util.get_data_maybe(current_u)
+        self.verbose = verbose
+
+        self.back_eps = back_eps
+
+        self.no_op_forward = no_op_forward
+
+    # @profile
+    def forward(self, x_init, C, c, F, f=None):
+        if self.no_op_forward:
+            self.save_for_backward(
+                x_init, C, c, F, f, self.current_x, self.current_u)
+            return self.current_x, self.current_u
+
+        if self.delta_space:
             # Taylor-expand the objective to do the backward pass in
             # the delta space.
-            assert ctx.current_x is not None
-            assert ctx.current_u is not None
+            assert self.current_x is not None
+            assert self.current_u is not None
             c_back = []
-            for t in range(ctx.T):
-                xt = ctx.current_x[t]
-                ut = ctx.current_u[t]
+            for t in range(self.T):
+                xt = self.current_x[t]
+                ut = self.current_u[t]
                 xut = torch.cat((xt, ut), 1)
                 c_back.append(util.bmv(C[t], xut) + c[t])
             c_back = torch.stack(c_back)
@@ -114,32 +109,31 @@ class LQRStep(Function):
         else:
             assert False
 
-        Ks, ks, ctx.back_out = LQRStep.lqr_backward(ctx, C, c_back, F, f_back)
-        new_x, new_u, ctx.for_out = LQRStep.lqr_forward(ctx,
+        Ks, ks, self.back_out = self.lqr_backward(C, c_back, F, f_back)
+        new_x, new_u, self.for_out = self.lqr_forward(
             x_init, C, c, F, f, Ks, ks)
-        ctx.save_for_backward(x_init, C, c, F, f, new_x, new_u)
+        self.save_for_backward(x_init, C, c, F, f, new_x, new_u)
 
-        return new_x, new_u, ctx.back_out, ctx.for_out
+        return new_x, new_u
     
-    @staticmethod
-    def backward(ctx, dl_dx, dl_du, back_out, for_out):
+    def backward(self, dl_dx, dl_du):
         start = time.time()
-        x_init, C, c, F, f, new_x, new_u = ctx.saved_tensors
+        x_init, C, c, F, f, new_x, new_u = self.saved_tensors
 
         r = []
-        for t in range(ctx.T):
+        for t in range(self.T):
             rt = torch.cat((dl_dx[t], dl_du[t]), 1)
             r.append(rt)
         r = torch.stack(r)
 
-        if ctx.u_lower is None:
+        if self.u_lower is None:
             I = None
         else:
-            I = (torch.abs(new_u - ctx.u_lower) <= 1e-8) | \
-                (torch.abs(new_u - ctx.u_upper) <= 1e-8)
+            I = (torch.abs(new_u - self.u_lower) <= 1e-8) | \
+                (torch.abs(new_u - self.u_upper) <= 1e-8)
         dx_init = Variable(torch.zeros_like(x_init))
         _mpc = mpc.MPC(
-            ctx.n_state, ctx.n_ctrl, ctx.T,
+            self.n_state, self.n_ctrl, self.T,
             u_zero_I=I,
             u_init=None,
             lqr_iter=1,
@@ -148,7 +142,7 @@ class LQRStep(Function):
             delta_u=None,
             # exit_unconverged=True, # It's really bad if this doesn't converge.
             exit_unconverged=False, # It's really bad if this doesn't converge.
-            eps=ctx.back_eps,
+            eps=self.back_eps,
         )
         dx, du, _ = _mpc(dx_init, mpc.QuadCost(C, -r), mpc.LinDx(F, None))
 
@@ -157,7 +151,7 @@ class LQRStep(Function):
         xu = torch.cat((new_x, new_u), 2)
 
         dC = torch.zeros_like(C)
-        for t in range(ctx.T):
+        for t in range(self.T):
             xut = torch.cat((new_x[t], new_u[t]), 1)
             dxut = dxu[t]
             dCt = -0.5*(util.bger(dxut, xut) + util.bger(xut, dxut))
@@ -167,15 +161,15 @@ class LQRStep(Function):
 
         lams = []
         prev_lam = None
-        for t in range(ctx.T-1, -1, -1):
-            Ct_xx = C[t,:,:ctx.n_state,:ctx.n_state]
-            Ct_xu = C[t,:,:ctx.n_state,ctx.n_state:]
-            ct_x = c[t,:,:ctx.n_state]
+        for t in range(self.T-1, -1, -1):
+            Ct_xx = C[t,:,:self.n_state,:self.n_state]
+            Ct_xu = C[t,:,:self.n_state,self.n_state:]
+            ct_x = c[t,:,:self.n_state]
             xt = new_x[t]
             ut = new_u[t]
             lamt = util.bmv(Ct_xx, xt) + util.bmv(Ct_xu, ut) + ct_x
             if prev_lam is not None:
-                Fxt = F[t,:,:,:ctx.n_state].transpose(1, 2)
+                Fxt = F[t,:,:,:self.n_state].transpose(1, 2)
                 lamt += util.bmv(Fxt, prev_lam)
             lams.append(lamt)
             prev_lam = lamt
@@ -183,22 +177,22 @@ class LQRStep(Function):
 
         dlams = []
         prev_dlam = None
-        for t in range(ctx.T-1, -1, -1):
-            dCt_xx = C[t,:,:ctx.n_state,:ctx.n_state]
-            dCt_xu = C[t,:,:ctx.n_state,ctx.n_state:]
-            drt_x = -r[t,:,:ctx.n_state]
+        for t in range(self.T-1, -1, -1):
+            dCt_xx = C[t,:,:self.n_state,:self.n_state]
+            dCt_xu = C[t,:,:self.n_state,self.n_state:]
+            drt_x = -r[t,:,:self.n_state]
             dxt = dx[t]
             dut = du[t]
             dlamt = util.bmv(dCt_xx, dxt) + util.bmv(dCt_xu, dut) + drt_x
             if prev_dlam is not None:
-                Fxt = F[t,:,:,:ctx.n_state].transpose(1, 2)
+                Fxt = F[t,:,:,:self.n_state].transpose(1, 2)
                 dlamt += util.bmv(Fxt, prev_dlam)
             dlams.append(dlamt)
             prev_dlam = dlamt
         dlams = torch.stack(list(reversed(dlams)))
 
         dF = torch.zeros_like(F)
-        for t in range(ctx.T-1):
+        for t in range(self.T-1):
             xut = xu[t]
             lamt = lams[t+1]
 
@@ -216,22 +210,21 @@ class LQRStep(Function):
 
         dx_init = -dlams[0]
 
-        ctx.backward_time = time.time()-start
-        return dx_init, dC, dc, dF, df, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        self.backward_time = time.time()-start
+        return dx_init, dC, dc, dF, df
 
     # @profile
-    @staticmethod
-    def lqr_backward(ctx, C, c, F, f):
+    def lqr_backward(self, C, c, F, f):
         n_batch = C.size(1)
 
-        u = ctx.current_u
+        u = self.current_u
         Ks = []
         ks = []
         prev_kt = None
         n_total_qp_iter = 0
         Vtp1 = vtp1 = None
-        for t in range(ctx.T-1, -1, -1):
-            if t == ctx.T-1:
+        for t in range(self.T-1, -1, -1):
+            if t == self.T-1:
                 Qt = C[t]
                 qt = c[t]
             else:
@@ -245,7 +238,7 @@ class LQRStep(Function):
                     qt = c[t] + Ft_T.bmm(Vtp1).bmm(ft.unsqueeze(2)).squeeze(2) + \
                         Ft_T.bmm(vtp1.unsqueeze(2)).squeeze(2)
 
-            n_state = ctx.n_state
+            n_state = self.n_state
             Qt_xx = Qt[:, :n_state, :n_state]
             Qt_xu = Qt[:, :n_state, n_state:]
             Qt_ux = Qt[:, n_state:, :n_state]
@@ -253,12 +246,12 @@ class LQRStep(Function):
             qt_x = qt[:, :n_state]
             qt_u = qt[:, n_state:]
 
-            if ctx.u_lower is None:
-                if ctx.n_ctrl == 1 and ctx.u_zero_I is None:
+            if self.u_lower is None:
+                if self.n_ctrl == 1 and self.u_zero_I is None:
                     Kt = -(1./Qt_uu)*Qt_ux
                     kt = -(1./Qt_uu.squeeze(2))*qt_u
                 else:
-                    if ctx.u_zero_I is None:
+                    if self.u_zero_I is None:
                         Qt_uu_inv = [
                             torch.pinverse(Qt_uu[i]) for i in range(Qt_uu.shape[0])
                         ]
@@ -271,9 +264,8 @@ class LQRStep(Function):
                         # kt = -qt_u.btrisolve(*Qt_uu_LU)
                     else:
                         # Solve with zero constraints on the active controls.
-                        I = ctx.u_zero_I[t]
-                        # print(f"I dtype: {I.dtype}", flush=True)
-                        notI = ~I # 1-I
+                        I = self.u_zero_I[t]
+                        notI = 1-I
 
                         qt_u_ = qt_u.clone()
                         qt_u_[I] = 0
@@ -284,15 +276,15 @@ class LQRStep(Function):
                             notI_ = notI.float()
                             Qt_uu_I = (1-util.bger(notI_, notI_)).type_as(I)
                         else:
-                            Qt_uu_I = (1-util.bger(notI, notI)).type_as(I)
-                            # print(f"Qt_uu_I dtype: {Qt_uu_I.dtype}", flush=True)
+                            Qt_uu_I = 1-util.bger(notI, notI)
+
                         Qt_uu_[Qt_uu_I] = 0.
                         Qt_uu_[util.bdiag(I)] += 1e-8
 
                         Qt_ux_ = Qt_ux.clone()
                         Qt_ux_[I.unsqueeze(2).repeat(1,1,Qt_ux.size(2))] = 0.
 
-                        if ctx.n_ctrl == 1:
+                        if self.n_ctrl == 1:
                             Kt = -(1./Qt_uu_)*Qt_ux_
                             kt = -(1./Qt_uu.squeeze(2))*qt_u_
                         else:
@@ -300,22 +292,22 @@ class LQRStep(Function):
                             Kt = -Qt_ux_.btrisolve(*Qt_uu_LU_)
                             kt = -qt_u_.btrisolve(*Qt_uu_LU_)
             else:
-                assert ctx.delta_space
-                lb = LQRStep.get_bound(ctx, 'lower', t) - u[t]
-                ub = LQRStep.get_bound(ctx, 'upper', t) - u[t]
-                if ctx.delta_u is not None:
-                    lb[lb < -ctx.delta_u] = -ctx.delta_u
-                    ub[ub > ctx.delta_u] = ctx.delta_u
+                assert self.delta_space
+                lb = self.get_bound('lower', t) - u[t]
+                ub = self.get_bound('upper', t) - u[t]
+                if self.delta_u is not None:
+                    lb[lb < -self.delta_u] = -self.delta_u
+                    ub[ub > self.delta_u] = self.delta_u
                 kt, Qt_uu_free_LU, If, n_qp_iter = pnqp(
                     Qt_uu, qt_u, lb, ub,
                     x_init=prev_kt, n_iter=20)
-                if ctx.verbose > 1:
+                if self.verbose > 1:
                     print('  + n_qp_iter: ', n_qp_iter+1)
                 n_total_qp_iter += 1+n_qp_iter
                 prev_kt = kt
                 Qt_ux_ = Qt_ux.clone()
-                Qt_ux_[(~If).unsqueeze(2).repeat(1,1,Qt_ux.size(2))] = 0  # 1-If
-                if ctx.n_ctrl == 1:
+                Qt_ux_[(1-If).unsqueeze(2).repeat(1,1,Qt_ux.size(2))] = 0
+                if self.n_ctrl == 1:
                     # Bad naming, Qt_uu_free_LU isn't the LU in this case.
                     Kt = -((1./Qt_uu_free_LU)*Qt_ux_)
                 else:
@@ -335,13 +327,12 @@ class LQRStep(Function):
 
 
     # @profile
-    @staticmethod
-    def lqr_forward(ctx, x_init, C, c, F, f, Ks, ks):
-        x = ctx.current_x
-        u = ctx.current_u
+    def lqr_forward(self, x_init, C, c, F, f, Ks, ks):
+        x = self.current_x
+        u = self.current_u
         n_batch = C.size(1)
 
-        old_cost = util.get_cost(ctx.T, u, ctx.true_cost, ctx.true_dynamics, x=x)
+        old_cost = util.get_cost(self.T, u, self.true_cost, self.true_dynamics, x=x)
 
         current_cost = None
         alphas = torch.ones(n_batch).type_as(C)
@@ -351,13 +342,13 @@ class LQRStep(Function):
         while (current_cost is None or \
                (old_cost is not None and \
                   torch.any((current_cost > old_cost)).cpu().item() == 1)) and \
-              i < ctx.max_linesearch_iter:
+              i < self.max_linesearch_iter:
             new_u = []
             new_x = [x_init]
             dx = [torch.zeros_like(x_init)]
             objs = []
-            for t in range(ctx.T):
-                t_rev = ctx.T-1-t
+            for t in range(self.T):
+                t_rev = self.T-1-t
                 Kt = Ks[t_rev]
                 kt = ks[t_rev]
                 new_xt = new_x[t]
@@ -367,19 +358,19 @@ class LQRStep(Function):
                 new_ut = util.bmv(Kt, dxt) + ut + torch.diag(alphas).mm(kt)
 
                 # Currently unimplemented:
-                assert not ((ctx.delta_u is not None) and (ctx.u_lower is None))
+                assert not ((self.delta_u is not None) and (self.u_lower is None))
 
-                if ctx.u_zero_I is not None:
-                    new_ut[ctx.u_zero_I[t]] = 0.
+                if self.u_zero_I is not None:
+                    new_ut[self.u_zero_I[t]] = 0.
 
-                if ctx.u_lower is not None:
-                    lb = LQRStep.get_bound(ctx, 'lower', t)
-                    ub = LQRStep.get_bound(ctx, 'upper', t)
+                if self.u_lower is not None:
+                    lb = self.get_bound('lower', t)
+                    ub = self.get_bound('upper', t)
 
-                    if ctx.delta_u is not None:
+                    if self.delta_u is not None:
                         lb_limit, ub_limit = lb, ub
-                        lb = u[t] - ctx.delta_u
-                        ub = u[t] + ctx.delta_u
+                        lb = u[t] - self.delta_u
+                        ub = u[t] + self.delta_u
                         I = lb < lb_limit
                         lb[I] = lb_limit if isinstance(lb_limit, float) else lb_limit[I]
                         I = ub > ub_limit
@@ -388,26 +379,26 @@ class LQRStep(Function):
                 new_u.append(new_ut)
 
                 new_xut = torch.cat((new_xt, new_ut), dim=1)
-                if t < ctx.T-1:
-                    if isinstance(ctx.true_dynamics, mpc.LinDx):
-                        F, f = ctx.true_dynamics.F, ctx.true_dynamics.f
+                if t < self.T-1:
+                    if isinstance(self.true_dynamics, mpc.LinDx):
+                        F, f = self.true_dynamics.F, self.true_dynamics.f
                         new_xtp1 = util.bmv(F[t], new_xut)
                         if f is not None and f.nelement() > 0:
                             new_xtp1 += f[t]
                             #if t==0:
                             #    print("In lqr_step: ", f[t])
                     else:
-                        new_xtp1 = ctx.true_dynamics(
+                        new_xtp1 = self.true_dynamics(
                             Variable(new_xt), Variable(new_ut)).data
 
                     new_x.append(new_xtp1)
                     dx.append(new_xtp1 - x[t+1])
 
-                if isinstance(ctx.true_cost, mpc.QuadCost):
-                    C, c = ctx.true_cost.C, ctx.true_cost.c
+                if isinstance(self.true_cost, mpc.QuadCost):
+                    C, c = self.true_cost.C, self.true_cost.c
                     obj = 0.5*util.bquad(new_xut, C[t]) + util.bdot(new_xut, c[t])
                 else:
-                    obj = ctx.true_cost(new_xut)
+                    obj = self.true_cost(new_xut)
 
                 objs.append(obj)
 
@@ -420,12 +411,12 @@ class LQRStep(Function):
                 full_du_norm = (u-new_u).transpose(1,2).contiguous().view(
                     n_batch, -1).norm(2, 1)
 
-            alphas[current_cost > old_cost] *= ctx.linesearch_decay
+            alphas[current_cost > old_cost] *= self.linesearch_decay
             i += 1
 
         # If the iteration limit is hit, some alphas
         # are one step too small.
-        alphas[current_cost > old_cost] /= ctx.linesearch_decay
+        alphas[current_cost > old_cost] /= self.linesearch_decay
         alpha_du_norm = (u-new_u).transpose(1,2).contiguous().view(
             n_batch, -1).norm(2, 1)
 
@@ -436,9 +427,8 @@ class LQRStep(Function):
             current_cost
         )
 
-    @staticmethod
-    def get_bound(ctx, side, t):
-        v = getattr(ctx, 'u_'+side)
+    def get_bound(self, side, t):
+        v = getattr(self, 'u_'+side)
         if isinstance(v, float):
             return v
         else:

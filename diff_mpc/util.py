@@ -38,8 +38,11 @@ def bdiag(d):
 
 
 def bger(x, y):
-    return x.unsqueeze(2).bmm(y.unsqueeze(1))
-
+    if x.dtype == torch.bool or y.dtype == torch.bool:
+        # Handle boolean tensors separately
+        return x.unsqueeze(2).to(torch.float32).bmm(y.unsqueeze(1).to(torch.float32))
+    else:
+        return x.unsqueeze(2).bmm(y.unsqueeze(1))
 
 def bmv(X, y):
     return X.bmm(y.unsqueeze(2)).squeeze(2)
