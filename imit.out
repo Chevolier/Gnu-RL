@@ -2306,3 +2306,149 @@ From state 0.15400132253461757, From action 3.9447709421002215
 tensor([[0.9463, 0.1424]], dtype=torch.float64, requires_grad=True)
 tensor([[0.2830, 0.4754, 0.1194, 0.0389, 0.4381, 0.6986, 0.7587]],
        dtype=torch.float64, requires_grad=True)
+From state 0.1676546259934049, From action 5.873039506396008
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9463, 0.1421]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2830, 0.4752, 0.1193, 0.0387, 0.4380, 0.6982, 0.7588]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.16941147038471602, From action 4.850761887800986
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9463, 0.1417]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2830, 0.4750, 0.1193, 0.0386, 0.4379, 0.6977, 0.7589]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.17572552552472984, From action 4.820547604137875
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9462, 0.1414]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2831, 0.4749, 0.1192, 0.0385, 0.4378, 0.6972, 0.7590]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.14541954954706693, From action 4.71281486773544
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9462, 0.1410]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2831, 0.4748, 0.1192, 0.0385, 0.4378, 0.6967, 0.7592]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.15859220649057598, From action 5.055103924667389
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9463, 0.1407]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2832, 0.4747, 0.1192, 0.0384, 0.4379, 0.6963, 0.7594]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.16634648080917025, From action 4.822703384319955
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9465, 0.1404]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2834, 0.4748, 0.1193, 0.0385, 0.4379, 0.6958, 0.7596]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.15868944532318877, From action 4.449180784166246
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9466, 0.1400]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2835, 0.4748, 0.1193, 0.0386, 0.4380, 0.6953, 0.7599]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.170240596064012, From action 5.581798634292848
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9468, 0.1397]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2837, 0.4748, 0.1195, 0.0387, 0.4381, 0.6948, 0.7602]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.1851212471049123, From action 4.746131333004274
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9471, 0.1394]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2839, 0.4749, 0.1196, 0.0388, 0.4381, 0.6943, 0.7606]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.19145105331023454, From action 4.240811513807538
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9472, 0.1391]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2841, 0.4749, 0.1197, 0.0389, 0.4382, 0.6939, 0.7609]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.169699323303183, From action 3.66885049979082
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9474, 0.1388]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2842, 0.4750, 0.1198, 0.0390, 0.4382, 0.6935, 0.7611]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.17648486370845107, From action 5.419762871148272
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9474, 0.1385]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2843, 0.4749, 0.1198, 0.0390, 0.4382, 0.6930, 0.7613]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.20271315397392142, From action 4.618383099841075
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9473, 0.1382]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2843, 0.4747, 0.1197, 0.0389, 0.4381, 0.6925, 0.7613]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.17727662970113167, From action 4.207634764190648
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9472, 0.1378]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2842, 0.4746, 0.1196, 0.0387, 0.4379, 0.6920, 0.7614]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.2078735127009521, From action 4.3748033104094715
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9471, 0.1375]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2842, 0.4743, 0.1194, 0.0385, 0.4377, 0.6915, 0.7613]],
+       dtype=torch.float64, requires_grad=True)
+2017-04-02 00:00:00
+At Epoch 16, the loss from the state is 0.13777344962019245 and from the action is 2.250696584171072
+From state 0.17463506510635476, From action 4.7237034879389475
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9469, 0.1372]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2841, 0.4741, 0.1193, 0.0383, 0.4375, 0.6910, 0.7613]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.16632372227284814, From action 6.32142165161826
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9467, 0.1368]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2840, 0.4738, 0.1191, 0.0381, 0.4372, 0.6904, 0.7612]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.15857067229589805, From action 4.336198343227557
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9466, 0.1365]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2839, 0.4736, 0.1189, 0.0378, 0.4371, 0.6899, 0.7612]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.15684023189974103, From action 3.978809542612923
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9464, 0.1361]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2839, 0.4734, 0.1187, 0.0376, 0.4369, 0.6893, 0.7612]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.14487007702282328, From action 5.865677977052895
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9463, 0.1358]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2838, 0.4731, 0.1185, 0.0373, 0.4368, 0.6888, 0.7612]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.12442901789351353, From action 5.1812212197664085
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9461, 0.1354]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2838, 0.4728, 0.1183, 0.0371, 0.4367, 0.6883, 0.7612]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.1533955037172861, From action 5.179319521466117
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9460, 0.1351]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2837, 0.4726, 0.1181, 0.0369, 0.4367, 0.6878, 0.7612]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.15948590492489345, From action 5.630392063293533
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9460, 0.1348]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2837, 0.4725, 0.1180, 0.0368, 0.4367, 0.6873, 0.7613]],
+       dtype=torch.float64, requires_grad=True)
+From state 0.15321740099302517, From action 5.50062199430041
+/home/ec2-user/SageMaker/efs/Projects/Gnu-RL/diff_mpc/util.py:36: UserWarning: masked_fill_ received a mask with dtype torch.uint8, this behavior is now deprecated,please use a mask with dtype torch.bool instead. (Triggered internally at ../aten/src/ATen/native/TensorAdvancedIndexing.cpp:1772.)
+  D[I] = d.view(-1)
+tensor([[0.9459, 0.1344]], dtype=torch.float64, requires_grad=True)
+tensor([[0.2837, 0.4724, 0.1180, 0.0367, 0.4367, 0.6869, 0.7613]],
+       dtype=torch.float64, requires_grad=True)

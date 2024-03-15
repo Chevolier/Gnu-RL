@@ -44,6 +44,23 @@ def request_claude(prompt, system_prompt, version='3-sonnet-20240229-v1:0'):
     
     return response_body.get('content')[0]['text']
 
+def request_claude2(prompt, version='v2'):
+    body = json.dumps({
+        "prompt": f"Human:{prompt}Assistant:",
+        "max_tokens_to_sample": 512,
+        "temperature": 0.1,
+        "top_p": 0.9,
+    })
+
+    modelId = f'anthropic.claude-{version}'
+    accept = 'application/json'
+    contentType = 'application/json'
+
+    response = bedrock.invoke_model(body=body, modelId=modelId, accept=accept, contentType=contentType)
+    response_body = json.loads(response.get('body').read())
+    
+    return response_body.get('completion')
+
 # test Claude 3 model
 # prompt = "Who are you?"
 # response = request_claude(prompt)
