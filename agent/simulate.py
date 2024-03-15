@@ -11,8 +11,8 @@ import numpy as np
 from utils import make_dict
 
 # Create Environment. Follow the documentation of 'Gym-Eplus' to set up additional EnergyPlus simulation environment.
-# env = gym.make('5Zone-sim_TMY2-v0');
-env = gym.make('5Zone-sim_TMY3-v0');
+env = gym.make('5Zone-sim_TMY2-v0');
+# env = gym.make('5Zone-sim_TMY3-v0');
 
 # Modify here: Outputs from EnergyPlus; Match the variables.cfg file.
 obs_name = ["Outdoor Temp.", "Outdoor RH", "Wind Speed", "Wind Direction", "Diff. Solar Rad.", "Direct Solar Rad.", "Htg SP", "Clg SP", "Indoor Temp.", "Indoor Temp. Setpoint", "PPD", "Occupancy Flag", "Coil Power", "HVAC Power", "Sys In Temp.", "Sys In Mdot", "OA Temp.", "OA Mdot", "MA Temp.", "MA Mdot", "Sys Out Temp.", "Sys Out Mdot"]
@@ -47,10 +47,10 @@ for i in range(91*96):
 # Save Observations
 obs_df = pd.DataFrame(np.array(observations), index = np.array(timeStamp), columns = obs_name)
 dist_df = obs_df[dist_name]
-# obs_df.to_csv("results/Sim-TMY2.csv")
-obs_df.to_pickle("results/Sim-TMY3.pkl")
-# dist_df.to_csv("results/Dist-TMY2.csv")
-dist_df.to_pickle("results/Dist-TMY3.pkl")
+obs_df.to_pickle("results/Sim-TMY2.pkl")
+# obs_df.to_pickle("results/Sim-TMY3.pkl")
+dist_df.to_pickle("results/Dist-TMY2.pkl")
+# dist_df.to_pickle("results/Dist-TMY3.pkl")
 print("Saved!")
 
 env.end_env() # Safe termination of the environment after use.

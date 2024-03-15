@@ -196,7 +196,7 @@ class PPO():
 
 def main():
     # Create Simulation Environment
-    env = gym.make('5Zone-control_TMY3-v0')
+    env = gym.make('5Zone-control_TMY2-v0')
 
     # Modify here: Outputs from EnergyPlus; Match the variables.cfg file.
     obs_name = ["Outdoor Temp.", "Outdoor RH", "Wind Speed", "Wind Direction", "Diff. Solar Rad.", "Direct Solar Rad.", "Htg SP", "Clg SP", "Indoor Temp.", "Indoor Temp. Setpoint", "PPD", "Occupancy Flag", "Coil Power", "HVAC Power", "Sys In Temp.", "Sys In Mdot", "OA Temp.", "OA Mdot", "MA Temp.", "MA Mdot", "Sys Out Temp.", "Sys Out Mdot"]
@@ -220,7 +220,7 @@ def main():
     u_lower = 0
 
     # Read Information on Weather, Occupancy, and Target Setpoint
-    obs = pd.read_pickle("results/Dist-TMY3.pkl")
+    obs = pd.read_pickle("results/Dist-TMY2.pkl")
     target = obs[target_name]
     disturbance = obs[dist_name]
     
@@ -288,6 +288,7 @@ def main():
             # If the room gets too warm during occupied period, uses outdoor air for free cooling.
             if (obs_dict["Indoor Temp."]>obs_dict["Indoor Temp. Setpoint"]) & (obs_dict["Occupancy Flag"]==1):
                 SAT_stpt = obs_dict["Outdoor Temp."]
+            
             timeStep, obs, isTerminal = env.step([SAT_stpt])
             
             obs_dict = make_dict(obs_name, obs)
