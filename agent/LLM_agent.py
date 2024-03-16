@@ -100,16 +100,16 @@ dist_name = ["Outdoor Temp.", "Outdoor RH", "Wind Speed", "Wind Direction", "Dif
 # Reset the env (creat the EnergyPlus subprocess)
 timeStep, obs, isTerminal = env.reset();
 obs_dict = make_dict(obs_name, obs)
-start_time = pd.datetime(year = env.start_year, month = env.start_mon, day = env.start_day)
+start_time = pd.datetime(year = env.start_year, month = 3, day = 5)
 print(start_time)
 
 timeStamp = [start_time]
 observations = [obs]
 actions = []
 
+claude_version = 3
 num_hist_steps = 1 # only use the latest num_steps in the history
-
-num_steps = 14*96
+num_steps = 9*96
 history = [[round(obs_dict['Indoor Temp.'], 1), None, None, round(obs_dict['Indoor Temp. Setpoint'], 1), round(obs_dict['MA Temp.'], 1)]]
 for i in range(num_steps):
     # Using EnergyPlus default control strategy;
@@ -119,12 +119,17 @@ for i in range(num_steps):
         History: {history}
         Action: 
     """
+    
     # print(f"prompt: {prompt}")
     try:
-        response = request_claude(prompt, system_prompt)
+        if claude_version == 2:
+            response = request_claude2(system_prompt+prompt)
+        elif claude_version == 3:
+            response = request_claude(prompt, system_prompt)
+            
         # print(f"response: {response}")
         action = float(response.strip())
-        # print(f"action_value: {action_value}, type: {type(action_value)}")
+        # print(f"action_value: {action}, type: {type(action)}")
     except Exception as e:
         print(f"Error: {e}")
         continue
@@ -150,9 +155,9 @@ for i in range(num_steps):
 obs_df = pd.DataFrame(np.array(observations), index = np.array(timeStamp), columns = obs_name)
 dist_df = obs_df[dist_name]
 # obs_df.to_csv("results/Sim-TMY2.csv")
-obs_df.to_pickle(f"results/Sim-TMY2-llm-{num_hist_steps}.pkl")
+obs_df.to_pickle(f"results/Sim-TMY2-llm-{num_hist_steps}-claude{claude_version}.pkl")
 # dist_df.to_csv("results/Dist-TMY2.csv")
-dist_df.to_pickle(f"results/Dist-TMY2-llm-{num_hist_steps}.pkl")
+dist_df.to_pickle(f"results/Dist-TMY2-llm-{num_hist_steps}-claude{claude_version}.pkl")
 print("Saved!")
 
 env.end_env() # Safe termination of the environment after use.

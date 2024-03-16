@@ -108,3 +108,4 @@ venv.bak/
 
 results/
 Eplus-env-5Zone*/
+*.out

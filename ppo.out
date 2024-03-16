@@ -10,8 +10,8 @@ tensor([[0.9248, 0.1440]], dtype=torch.float64, requires_grad=True)
 Load pretrained Bd
 tensor([[0.7404, 0.1490, 0.3049, 0.5458, 0.2676, 0.3085, 0.6900]],
        dtype=torch.float64, requires_grad=True)
-[2024-03-15 04:03:14,037] EPLUS_ENV_5Zone-control-v0_MainThread_ROOT INFO:Creating EnergyPlus simulation environment...
-[2024-03-15 04:03:14,091] EPLUS_ENV_5Zone-control-v0_MainThread_ROOT INFO:EnergyPlus working directory is in /home/ec2-user/SageMaker/efs/Projects/Gnu-RL/Eplus-env-5Zone-control-v0-res40/Eplus-env-sub_run1
+[2024-03-15 06:27:19,818] EPLUS_ENV_5Zone-control-v0_MainThread_ROOT INFO:Creating EnergyPlus simulation environment...
+[2024-03-15 06:27:19,875] EPLUS_ENV_5Zone-control-v0_MainThread_ROOT INFO:EnergyPlus working directory is in /home/ec2-user/SageMaker/efs/Projects/Gnu-RL/Eplus-env-5Zone-control-v0-res44/Eplus-env-sub_run1
 /home/ec2-user/SageMaker/efs/Projects/Gnu-RL/agent/PPO_MPC_EP.py:252: FutureWarning: The pandas.datetime class is deprecated and will be removed from pandas in a future version. Import from datetime module instead.
   start_time = pd.datetime(year = env.start_year, month = env.start_mon, day = env.start_day)
 2017-01-01 00:00:00
