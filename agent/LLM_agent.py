@@ -69,11 +69,11 @@ def request_claude2(prompt, version='v2'):
 system_prompt = """
 You are an HVAC controller agent, you would interacte with the EnergyPlus environment to control the indoor room temperature. Your main purpose
 is to keep the indoor room temperature (St) as close to the indoor room set temperature (St_setpoint) as possible by adjusting the supply air temperature setpoint 
-while obtaining the highest cumulative rewards. Mixed air temperature at time t is defined as MAt
+while obtaining the highest cumulative rewards.
 
 1. State is defined as the indoor room temperature St. 
 2. Action is defined as the supply air temperature setpoint At. 
-3. Reward is defined as Rt = -0.5 * (St - St_setpoint) ** 2 - abs(At - MAt)
+3. Reward is defined as Rt = -0.5 * (St - St_setpoint) ** 2 - abs(At - MAt), where MAt is mixed air temperature at time t. 
 
 You will be given a history of the form [[S0, A0, R0, S0_setpoint, MA0], [S1, A1, R1, S1_setpoint, MA1], ..., [St-1, At-1, Rt-1, St-1_setpoint, MAt-1], [St, None, None, St_setpoint, MAt]], try to find the pattern in the history and take the best action At based on the history and the current state, setpoint, etc., to maximize the reward. Besides, please respond to the abrupt change of St_setpoint as quickly as possible.
 
